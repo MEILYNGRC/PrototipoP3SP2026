@@ -1,5 +1,6 @@
 package Vista;
 
+
 import Controlador.Peliculas;
 import Controlador.clsBitacora;
 import Modelo.PeliculasDAO;
