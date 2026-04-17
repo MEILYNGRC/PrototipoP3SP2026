@@ -7,13 +7,13 @@
 //Meilyn’s update(bitacora)
 package Vista;
 
-import Controlador.clsSeguridad;
+//import Controlador.clsSeguridad;
 import Controlador.clsBitacora;
-import Controlador.clsPerfil;
-import Controlador.clsUsuarioConectado;
+import Controlador.Peliculas;
+//import Controlador.clsUsuarioConectado;
 import Modelo.BitacoraDAO;
 import Modelo.Conexion;
-import Modelo.PerfilDAO;
+import Modelo.PeliculasDAO;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
@@ -86,12 +86,12 @@ public class frmMantenimientoPerfil extends javax.swing.JInternalFrame {
 
     tablaPerfil.setModel(modelo);
 
-    PerfilDAO dao = new PerfilDAO();
+    PeliculasDAO dao = new PeliculasDAO();
     clsBitacora bitacora = crearBitacora("Consulta perfiles");
-    List<clsPerfil> listaPerfiles = dao.obtenerPerfiles(bitacora);
+    List<Peliculas> listaPeliculas = dao.obtenerPeliculas(bitacora);
 
     String[] dato = new String[3];
-    for (clsPerfil p : listaPerfiles) {
+    for (Peliculas p : listaPeliculas) {
         dato[0] = String.valueOf(p.getPercodigo());
         dato[1] = p.getPernombre();
         dato[2] = p.getPerestado();
@@ -344,30 +344,34 @@ dao.eliminarPerfil(perfil, bitacora);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        if(txtNombre.getText().isEmpty() || txtEstado.getText().isEmpty()){
-    JOptionPane.showMessageDialog(null, "Complete los campos");
-    return;
-    } 
-    
-    clsPerfil perfil = new clsPerfil();
-    perfil.setPernombre(txtNombre.getText());
-    perfil.setPerestado(txtEstado.getText());
 
-    PerfilDAO dao = new PerfilDAO();
-    clsBitacora bitacora = crearBitacora("Insertar perfil");
-    dao.insertarPerfil(perfil, bitacora);
+        if (txtNombre.getText().isEmpty() || txtPrecio.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Complete los campos");
+            return;
+        }
 
-    JOptionPane.showMessageDialog(null, "Perfil registrado");
-    
-    
+        Peliculas peli = new Peliculas();
+        peli.setNombre(txtNombre.getText());
+        peli.setClasificacion(txtClasificacion.getText());
+        peli.setGenero(txtGenero.getText());
+        peli.setSubtitulado(txtSubtitulado.getText());
+        peli.setIdioma(txtIdioma.getText());
+        peli.setPrecio(Double.parseDouble(txtPrecio.getText()));
 
-    llenadoDeTablas();
-    limpiarTextos();
+        PeliculasDAO dao = new PeliculasDAO();
+        clsBitacora bitacora = crearBitacora("Insertar pelicula");
+        dao.insertar(peli, bitacora);
+
+        JOptionPane.showMessageDialog(null, "Película registrada");
+
+        llenadoDeTablas();
+        limpiarTextos();
+    }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
             // TODO add your handling code here:       
-        PerfilDAO dao = new PerfilDAO();
+        PeliculasDAO dao = new PeliculasDAO();
     if(txtBuscar.getText().isEmpty()){
     JOptionPane.showMessageDialog(null, "Ingrese un ID");
     return;
@@ -375,7 +379,7 @@ dao.eliminarPerfil(perfil, bitacora);
     int id = Integer.parseInt(txtBuscar.getText());
 
     clsBitacora bitacora = crearBitacora("Buscar perfil");
-clsPerfil perfil = dao.obtenerPerfilPorId(id, bitacora);
+Peliculas perfil = dao.obtenerPeliculasPoridPeliculas(id, bitacora);
 
     if(perfil != null){
         txtCodigo.setText(String.valueOf(perfil.getPercodigo()));
@@ -383,7 +387,6 @@ clsPerfil perfil = dao.obtenerPerfilPorId(id, bitacora);
         txtEstado.setText(perfil.getPerestado());
     }else{
         JOptionPane.showMessageDialog(null, "Perfil no encontrado");
-    }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
